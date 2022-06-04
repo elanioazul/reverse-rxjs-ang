@@ -1,10 +1,25 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-
-const routes: Routes = [];
+import { AppComponent } from './app.component';
+import { PizarraComponent } from './components/pizarra/pizarra.component';
+const appRoutes: Routes = [
+  {
+    path: 'reverse-obs',
+    component: AppComponent
+  },
+  {
+    path: 'normal-obs',
+    component: PizarraComponent
+  }
+]
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  imports: [
+    RouterModule.forRoot(appRoutes, {
+      useHash: true,
+      anchorScrolling: 'enabled'
+    }),
+  ],
+  exports: [RouterModule],
 })
 export class AppRoutingModule { }

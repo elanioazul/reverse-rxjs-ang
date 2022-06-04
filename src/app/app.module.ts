@@ -3,10 +3,12 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { PizarraComponent } from './components/pizarra/pizarra.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    PizarraComponent
   ],
   imports: [
     BrowserModule,
