@@ -8,10 +8,11 @@ import { Observable, of, from} from 'rxjs';
 export class PizarraComponent implements OnInit {
 
   public emiter: Observable<number> = of(1,2,3,4);
+  public emitArr: Observable<number> = from([5,6,7,8]);
   constructor() { }
 
   ngOnInit(): void {
-    this.emiter.subscribe({
+    this.emitArr.subscribe({
       next: (val: number) => {
         console.log(`value is at this point of the stream: ${val}`)
       }
