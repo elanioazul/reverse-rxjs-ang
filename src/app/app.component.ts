@@ -17,6 +17,10 @@ export class AppComponent implements OnInit {
     return x;
   };
 
+  filter(x: any): any {
+    return x;
+  }
+
   printFunction(thing: any) {
     console.log(`I will print the ${thing}`);
   }
@@ -32,21 +36,38 @@ export class AppComponent implements OnInit {
     // o.subscribe(this.printFunction);
     // o.subscribe(this.multiplyBy2);
     // o.subscribe(this.sum2);
+    // o.subscribe(
+    //   this.improvedPipe(
+    //     this.square,
+    //     this.multiplyBy2,
+    //     this.tap(this.printFunction),
+    //     this.square,
+    //     this.printFunction
+    //   )
+    // );
+
     o.subscribe(
       this.improvedPipe(
+        this.filter(x => {
+          if(x > 0) {
+            console.log('In Range')
+            return x;
+          }
+          console.log('Out of Range')
+          return 0
+        }),
         this.square,
-        this.multiplyBy2,
-        this.tap(this.printFunction),
-        this.square,
-        this.printFunction
-      )
-    );
+        this.tap(this.printFunction)
+      ));
 
     // o.emit("Apple");
     // o.emit("Orange");
     // o.emit("Pear");
 
-    o.emit(2)
+    o.emit(2);
+    o.emit(-4);
+    o.emit(8);
+    o.emit(4);
   }
 
 }
