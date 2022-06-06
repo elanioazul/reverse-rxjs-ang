@@ -31,8 +31,17 @@ export class AppComponent implements OnInit {
   sum2(num: number) {
     console.log(num + 2)
   }
+
+  fakeApi(o?) {
+    setTimeout(() => {
+      o.emit(1);
+      o.emit(2);
+      o.emit(3);
+    }, 1000);
+  }
   ngOnInit(): void {
     const o = new Observable();
+    const o2 = new Observable();
     // o.subscribe(this.printFunction);
     // o.subscribe(this.multiplyBy2);
     // o.subscribe(this.sum2);
@@ -45,29 +54,39 @@ export class AppComponent implements OnInit {
     //     this.printFunction
     //   )
     // );
+    this.fakeApi(o);
+    o.pipe(o2);
 
-    o.subscribe(
+    o2.subscribe(
       this.improvedPipe(
-        this.filter(x => {
-          if(x > 0) {
-            console.log('In Range')
-            return x;
-          }
-          console.log('Out of Range')
-          return 0
-        }),
-        this.square,
-        this.tap(this.printFunction)
-      ));
+        this.multiplyBy2,
+        this.multiplyBy2,
+        this.printFunction
+      )
+    )
+
+    // o.subscribe(
+    //   this.improvedPipe(
+    //     this.filter(x => {
+    //       if(x > 0) {
+    //         console.log('In Range')
+    //         return x;
+    //       }
+    //       console.log('Out of Range')
+    //       return 0
+    //     }),
+    //     this.square,
+    //     this.tap(this.printFunction)
+    //   ));
 
     // o.emit("Apple");
     // o.emit("Orange");
     // o.emit("Pear");
 
-    o.emit(2);
-    o.emit(-4);
-    o.emit(8);
-    o.emit(4);
+    // o.emit(2);
+    // o.emit(-4);
+    // o.emit(8);
+    // o.emit(4);
   }
 
 }

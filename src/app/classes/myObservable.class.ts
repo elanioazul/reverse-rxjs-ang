@@ -1,3 +1,4 @@
+//import { Observable as officialObservable} from "rxjs";
 export class Observable {
   fnArray;
   constructor() {
@@ -10,5 +11,10 @@ export class Observable {
 
   emit(v) {
     this.fnArray.map(fun => fun(v));
+  }
+
+  pipe(observable: Observable) {
+    const fn = x => observable.emit(x);
+    this.subscribe(fn);
   }
 }
