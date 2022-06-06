@@ -26,7 +26,12 @@ export class AppComponent implements OnInit {
     // o.subscribe(this.printFunction);
     // o.subscribe(this.multiplyBy2);
     // o.subscribe(this.sum2);
-    o.subscribe(x => this.printFunction(this.square(x)));
+    o.subscribe(
+      this.pipe(
+        this.square,
+        this.printFunction
+      )
+    );
 
     // o.emit("Apple");
     // o.emit("Orange");
