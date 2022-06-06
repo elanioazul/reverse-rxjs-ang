@@ -11,12 +11,14 @@ export class AppComponent implements OnInit {
   public square = (num: number) => num * num;
 
   private pipe = (f, g) => x => g(f(x));//pipe function to compose function, kind of currying function
+  private improvedPipe = (...funcs) => x => funcs.reduce((effects, f) => f(effects), x);//to be able to pass in any numbers of functions and compose them
 
   printFunction(thing: any) {
     console.log(`I will print the ${thing}`);
   }
   multiplyBy2(num: number) {
     console.log(num * 2)
+    return num * 2;
   }
   sum2(num: number) {
     console.log(num + 2)
@@ -27,7 +29,9 @@ export class AppComponent implements OnInit {
     // o.subscribe(this.multiplyBy2);
     // o.subscribe(this.sum2);
     o.subscribe(
-      this.pipe(
+      this.improvedPipe(
+        this.square,
+        this.multiplyBy2,
         this.square,
         this.printFunction
       )
@@ -37,7 +41,7 @@ export class AppComponent implements OnInit {
     // o.emit("Orange");
     // o.emit("Pear");
 
-    o.emit(4)
+    o.emit(2)
   }
 
 }
