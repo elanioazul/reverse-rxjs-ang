@@ -46,7 +46,7 @@ export class PizarraComponent implements OnInit {
     //   console.log(`subscriber recieved value : ${val}`)
     // })
 
-    const swallogingAgain = this.anotherEmiter.pipe(
+    const swallogingAgain: Observable<number | null> = this.anotherEmiter.pipe(
       map((val: number) => {
         if (val < 2) {
           return null;
