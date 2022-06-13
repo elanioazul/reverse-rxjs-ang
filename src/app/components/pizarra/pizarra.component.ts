@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, of, from, pipe, interval} from 'rxjs';
-import {map, take} from 'rxjs/operators';
+import {catchError, map, take} from 'rxjs/operators';
 import { IValue, INestedObj } from 'src/app/interfaces/varias.interfaces';
 @Component({
   selector: 'app-pizarra',
@@ -79,11 +79,22 @@ export class PizarraComponent implements OnInit {
     const returnIdValue = this.objEmit.pipe(
       map((val: INestedObj) => {
         return val.id!.value!
-      })
+      }),
+
     );
-    returnIdValue.subscribe((val: number) => {
-      console.log(`recieved ${val}`)
-    })
+    returnIdValue.subscribe(
+      (val: number) => {
+        console.log(`recieved ${val}`)
+      },
+      //called when error occurs
+      (error: unknown) => {
+        console.log(`error: ${error}`)
+      },
+      //complete function
+      () => {
+        console.log(`complete`)
+      }
+    )
   }
 
 }
