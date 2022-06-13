@@ -34,6 +34,16 @@ export class PizarraComponent implements OnInit {
     porDosYString.subscribe((val:string) => {
       console.log(`stringMap emmited: ${val}`)
     })
+
+    const swallowingValues = this.emiter.pipe(
+      map((val: number) => {
+        console.log(`swallowing the value ${val}`)
+        //forgot to return a value
+      })
+    )
+    swallowingValues.subscribe((val: void) => {
+      console.log(`subscriber recieved value : ${val}`)
+    })
   }
 
 }
