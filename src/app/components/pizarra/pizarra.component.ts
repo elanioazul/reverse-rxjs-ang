@@ -15,6 +15,7 @@ export class PizarraComponent implements OnInit {
   public sourceInterval: Observable<number> = interval(1000);
   public objEmit: Observable<INestedObj> = of(
     {id: {value: 1}},
+    {},
     {id: {value: 2}}
   )
   constructor() { }
