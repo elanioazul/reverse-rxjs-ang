@@ -13,4 +13,4 @@ export class Map {
       const val = this.func(x)
       return this.observable.emit(val);
     }
-   }
+}

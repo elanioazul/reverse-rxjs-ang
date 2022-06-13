@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from './classes/myObservable.class';
+import { Map as myMapOperator} from './classes/myMapOperator.class';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -16,6 +17,7 @@ export class AppComponent implements OnInit {
     fun(x);
     return x;
   };
+  private Rx = {} as any;
 
   filter(x: any): any {
     return x;
@@ -40,6 +42,7 @@ export class AppComponent implements OnInit {
     }, 1000);
   }
   ngOnInit(): void {
+    this.Rx.map = f => new myMapOperator(f);
     const o = new Observable();
     const o2 = new Observable();
     // o.subscribe(this.printFunction);
@@ -54,16 +57,23 @@ export class AppComponent implements OnInit {
     //     this.printFunction
     //   )
     // );
-    this.fakeApi(o);
-    o.pipe(o2);
+    // this.fakeApi(o);
+    // o.pipe(o2);
 
-    o2.subscribe(
+    // o2.subscribe(
+    //   this.improvedPipe(
+    //     this.multiplyBy2,
+    //     this.multiplyBy2,
+    //     this.printFunction
+    //   )
+    // )
+    const c = o.pipe(this.Rx.map(v => v * -3));
+    c.subscribe(
       this.improvedPipe(
-        this.multiplyBy2,
         this.multiplyBy2,
         this.printFunction
       )
-    )
+    );
 
     // o.subscribe(
     //   this.improvedPipe(

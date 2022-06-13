@@ -13,7 +13,7 @@ export class Observable {
     this.fnArray.map(fun => fun(v));
   }
 
-  pipe(observable: Observable) {
+  pipe(observable: Observable): void {
     const fn = x => observable.emit(x);
     this.subscribe(fn);
   }
