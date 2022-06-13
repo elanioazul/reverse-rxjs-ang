@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, of, from, pipe} from 'rxjs';
-import {map} from 'rxjs/operators';
+import { Observable, of, from, pipe, interval} from 'rxjs';
+import {map, take} from 'rxjs/operators';
 @Component({
   selector: 'app-pizarra',
   templateUrl: './pizarra.component.html',
@@ -11,6 +11,7 @@ export class PizarraComponent implements OnInit {
   public emiter: Observable<number> = of(1,2,3,4);
   public anotherEmiter: Observable<number> = of(1,2);
   public emitArr: Observable<number> = from([5,6,7,8]);
+  public sourceInterval: Observable<number> = interval(1000);
   constructor() { }
 
   ngOnInit(): void {
@@ -46,16 +47,28 @@ export class PizarraComponent implements OnInit {
     //   console.log(`subscriber recieved value : ${val}`)
     // })
 
-    const swallogingAgain: Observable<number | null> = this.anotherEmiter.pipe(
+    // const swallogingAgain: Observable<number | null> = this.anotherEmiter.pipe(
+    //   map((val: number) => {
+    //     if (val < 2) {
+    //       return null;
+    //     }
+    //     return val
+    //   })
+    // );
+    // swallogingAgain.subscribe((val: number | null) => {
+    //   console.log(`subscriber recieved value: ${val}`)
+    // })
+
+    const fivePulses = this.sourceInterval.pipe(
+      take(5),
       map((val: number) => {
-        if (val < 2) {
-          return null;
-        }
-        return val
+        console.log(`map received: ${val}`)
+        return `string_${val}`
       })
-    );
-    swallogingAgain.subscribe((val: number | null) => {
-      console.log(`subscriber recieved value: ${val}`)
+    )
+
+    fivePulses.subscribe((val: string) => {
+      console.log(`${new Date().toLocaleTimeString()} ${val}`)
     })
   }
 
