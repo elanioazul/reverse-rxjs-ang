@@ -24,8 +24,15 @@ export class PizarraComponent implements OnInit {
         return val % 2;
       })
     )
-    remainder.subscribe((val:any) => {
-      console.log(`remainder: ${val}`)
+    const porDosYString = this.emiter.pipe(
+      map((val: number) => { return val * 2 }),
+      map((val: number) => { return `str_${val}` })
+    )
+    // remainder.subscribe((val:any) => {
+    //   console.log(`remainder: ${val}`)
+    // })
+    porDosYString.subscribe((val:any) => {
+      console.log(`stringMap emmited: ${val}`)
     })
   }
 
