@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, of, from} from 'rxjs';
+import { Observable, of, from, pipe} from 'rxjs';
+import {map} from 'rxjs/operators';
 @Component({
   selector: 'app-pizarra',
   templateUrl: './pizarra.component.html',
@@ -12,10 +13,19 @@ export class PizarraComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.emitArr.subscribe({
-      next: (val: number) => {
-        console.log(`value is at this point of the stream: ${val}`)
-      }
+    // this.emitArr.subscribe({
+    //   next: (val: number) => {
+    //     console.log(`value is at this point of the stream: ${val}`)
+    //   }
+    // })
+    const remainder = this.emiter.pipe(
+      map((val: number) => {
+        console.log(`recieved value: ${val}`);
+        return val % 2;
+      })
+    )
+    remainder.subscribe((val:any) => {
+      console.log(`remainder: ${val}`)
     })
   }
 

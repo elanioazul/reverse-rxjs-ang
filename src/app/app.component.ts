@@ -67,13 +67,13 @@ export class AppComponent implements OnInit {
     //     this.printFunction
     //   )
     // )
-    const c = o.pipe(this.Rx.map(v => v * -3));
-    c.subscribe(
-      this.improvedPipe(
-        this.multiplyBy2,
-        this.printFunction
-      )
-    );
+    // const c = o.pipe(this.Rx.map(v => v * -3));
+    // c.subscribe(
+    //   this.improvedPipe(
+    //     this.multiplyBy2,
+    //     this.printFunction
+    //   )
+    // );
 
     // o.subscribe(
     //   this.improvedPipe(
