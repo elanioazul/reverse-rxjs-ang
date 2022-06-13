@@ -80,7 +80,10 @@ export class PizarraComponent implements OnInit {
       map((val: INestedObj) => {
         return val.id!.value!
       }),
-
+      catchError((error: unknown) => {
+        console.log(`stream cought : ${error}`);
+        return of(null);
+      })
     );
     returnIdValue.subscribe(
       (val: number) => {
