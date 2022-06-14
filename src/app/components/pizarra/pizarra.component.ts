@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, of, from, pipe, interval} from 'rxjs';
-import {catchError, map, take} from 'rxjs/operators';
+import {catchError, map, take, mergeMap} from 'rxjs/operators';
 import { IValue, INestedObj } from 'src/app/interfaces/varias.interfaces';
 import { IProductId, IProductDescription } from 'src/app/interfaces/catalogue.interface';
 @Component({
@@ -103,22 +103,31 @@ export class PizarraComponent implements OnInit {
       }
     )
 
+    // this.produtList.pipe(
+    //   map((value: IProductId) => {
+    //     console.log(`Product id: ${value.id}`);
+    //     return this.getProductName(value.id);
+    //   })
+    // ).subscribe((value: Observable<IProductDescription>) => {
+    //   value.subscribe((value: IProductDescription) => {
+    //     console.log(`product name: ${value.name}`);
+    //     console.log(`product desc: ${value.description}`);
+    //   })
+    // })
     this.produtList.pipe(
-      map((value: IProductId) => {
-        console.log(`Product id: ${value.id}`);
+      mergeMap((value: IProductId): Observable<IProductDescription> => {
+        console.log(`Product id: ${value?.id}`);
         return this.getProductName(value.id);
       })
-    ).subscribe((value: Observable<IProductDescription>) => {
-      value.subscribe((value: IProductDescription) => {
+    ).subscribe((value: IProductDescription) => {
         console.log(`product name: ${value.name}`);
         console.log(`product desc: ${value.description}`);
-      })
     })
   }
 
   
 
-  getProductName(id: number): Observable<IProductDescription | IProductId> {
+  getProductName(id: number): Observable<IProductDescription> {
     return of(
       {
         id: id,
