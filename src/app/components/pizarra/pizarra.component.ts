@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable, of, from, pipe, interval} from 'rxjs';
 import {catchError, map, take} from 'rxjs/operators';
 import { IValue, INestedObj } from 'src/app/interfaces/varias.interfaces';
+import { IProductId, IProductDescription } from 'src/app/interfaces/catalogue.interface';
 @Component({
   selector: 'app-pizarra',
   templateUrl: './pizarra.component.html',
@@ -17,6 +18,9 @@ export class PizarraComponent implements OnInit {
     {id: {value: 1}},
     {},
     {id: {value: 2}}
+  )
+  public produtList = <Observable<IProductId>>from(
+    [{id: 1}, {id: 2}, {id: 3}]
   )
   constructor() { }
 
@@ -96,6 +100,30 @@ export class PizarraComponent implements OnInit {
       //complete function
       () => {
         console.log(`complete`)
+      }
+    )
+
+    this.produtList.pipe(
+      map((value: IProductId) => {
+        console.log(`Product id: ${value.id}`);
+        return this.getProductName(value.id);
+      })
+    ).subscribe((value: Observable<IProductDescription>) => {
+      value.subscribe((value: IProductDescription) => {
+        console.log(`product name: ${value.name}`);
+        console.log(`product desc: ${value.description}`);
+      })
+    })
+  }
+
+  
+
+  getProductName(id: number): Observable<IProductDescription | IProductId> {
+    return of(
+      {
+        id: id,
+        name: `Product_${id}`,
+        description: `Description_${id}`
       }
     )
   }
