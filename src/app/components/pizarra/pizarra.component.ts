@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, of, from, pipe, interval} from 'rxjs';
-import {catchError, map, take, mergeMap} from 'rxjs/operators';
+import {catchError, map, take, mergeMap, delay} from 'rxjs/operators';
 import { IValue, INestedObj } from 'src/app/interfaces/varias.interfaces';
 import { IProductId, IProductDescription } from 'src/app/interfaces/catalogue.interface';
 @Component({
@@ -22,6 +22,7 @@ export class PizarraComponent implements OnInit {
   public produtList = <Observable<IProductId>>from(
     [{id: 1}, {id: 2}, {id: 3}]
   )
+  public emitThreeTwoOne = of(3,2,1);
   constructor() { }
 
   ngOnInit(): void {
@@ -80,28 +81,28 @@ export class PizarraComponent implements OnInit {
     // fivePulses.subscribe((val: string) => {
     //   console.log(`${new Date().toLocaleTimeString()} ${val}`)
     // })
-    const returnIdValue = this.objEmit.pipe(
-      map((val: INestedObj) => {
-        return val.id!.value!
-      }),
-      catchError((error: unknown) => {
-        console.log(`stream cought : ${error}`);
-        return of(null);
-      })
-    );
-    returnIdValue.subscribe(
-      (val: number) => {
-        console.log(`recieved ${val}`)
-      },
-      //called when error occurs
-      (error: unknown) => {
-        console.log(`error: ${error}`)
-      },
-      //complete function
-      () => {
-        console.log(`complete`)
-      }
-    )
+    // const returnIdValue = this.objEmit.pipe(
+    //   map((val: INestedObj) => {
+    //     return val.id!.value!
+    //   }),
+    //   catchError((error: unknown) => {
+    //     console.log(`stream cought : ${error}`);
+    //     return of(null);
+    //   })
+    // );
+    // returnIdValue.subscribe(
+    //   (val: number) => {
+    //     console.log(`recieved ${val}`)
+    //   },
+    //   //called when error occurs
+    //   (error: unknown) => {
+    //     console.log(`error: ${error}`)
+    //   },
+    //   //complete function
+    //   () => {
+    //     console.log(`complete`)
+    //   }
+    // )
 
     // this.produtList.pipe(
     //   map((value: IProductId) => {
@@ -114,14 +115,34 @@ export class PizarraComponent implements OnInit {
     //     console.log(`product desc: ${value.description}`);
     //   })
     // })
-    this.produtList.pipe(
-      mergeMap((value: IProductId): Observable<IProductDescription> => {
-        console.log(`Product id: ${value?.id}`);
-        return this.getProductName(value.id);
+    // this.produtList.pipe(
+    //   mergeMap((value: IProductId): Observable<IProductDescription> => {
+    //     console.log(`Product id: ${value?.id}`);
+    //     return this.getProductName(value.id);
+    //   })
+    // ).subscribe((value: IProductDescription) => {
+    //     console.log(`product name: ${value.name}`);
+    //     console.log(`product desc: ${value.description}`);
+    // })
+    
+    const delayedEmit = this.emitThreeTwoOne.pipe(
+      mergeMap((value: number) => {
+        console.log(
+          `>> emit >>
+          ${new Date().toLocaleTimeString()}
+          value: ${value},
+          delaying: ${1000 * value} ms`
+        );
+        return of(value).pipe(delay(1000 * value));
       })
-    ).subscribe((value: IProductDescription) => {
-        console.log(`product name: ${value.name}`);
-        console.log(`product desc: ${value.description}`);
+    )
+
+    delayedEmit.subscribe((val: number) => {
+      console.log(
+        `<< recieved <<
+        ${new Date().toLocaleString()}
+        recieved value: ${val}`
+      )
     })
   }
 
