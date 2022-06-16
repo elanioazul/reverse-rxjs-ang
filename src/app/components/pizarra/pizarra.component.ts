@@ -3,6 +3,9 @@ import { Observable, of, from, pipe, interval, forkJoin} from 'rxjs';
 import {catchError, map, take, mergeMap, concatMap, delay, toArray} from 'rxjs/operators';
 import { IValue, INestedObj } from 'src/app/interfaces/varias.interfaces';
 import { IProductId, IProductDescription } from 'src/app/interfaces/catalogue.interface';
+import { BroadcastService } from '../../classes/broadcastService.class';
+import { Listener} from '../../classes/listener.class';
+import { IBroadcastEvent, EventKeys} from '../../interfaces/busEvents.interface';
 @Component({
   selector: 'app-pizarra',
   templateUrl: './pizarra.component.html',
@@ -145,40 +148,50 @@ export class PizarraComponent implements OnInit {
     //     recieved value: ${val}`
     //   )
     // })
-    const threeNumbers: Observable<number[]> = this.onePerSec.pipe(
-      take(3),
-      map((val: number) => {
-        console.log(`>> this is threeNumbersPipe emmitting: ${val}`);
-        return val;
-      }),
-      toArray()
-    );
+    // const threeNumbers: Observable<number[]> = this.onePerSec.pipe(
+    //   take(3),
+    //   map((val: number) => {
+    //     console.log(`>> this is threeNumbersPipe emmitting: ${val}`);
+    //     return val;
+    //   }),
+    //   toArray()
+    // );
 
-    const twoStrings: Observable<string[]> = this.onePerSec.pipe(
-      take(2),
-      map((val: number) => {
-        console.log(`>> this is twoStringsPipe emmitting: value_${val}`);
-        return `value_${val}`;
-      }),
-      toArray()
-    );
+    // const twoStrings: Observable<string[]> = this.onePerSec.pipe(
+    //   take(2),
+    //   map((val: number) => {
+    //     console.log(`>> this is twoStringsPipe emmitting: value_${val}`);
+    //     return `value_${val}`;
+    //   }),
+    //   toArray()
+    // );
 
-    forkJoin([threeNumbers, twoStrings]).subscribe(([threeNumbersOutput, twoStringsOutput]) => {
-      console.log(`<<threeNumbersOutput returned : ${threeNumbersOutput}`);
-      console.log(`<<twoStringsOutput returned : ${twoStringsOutput}`)
-    })
+    // forkJoin([threeNumbers, twoStrings]).subscribe(([threeNumbersOutput, twoStringsOutput]) => {
+    //   console.log(`<<threeNumbersOutput returned : ${threeNumbersOutput}`);
+    //   console.log(`<<twoStringsOutput returned : ${twoStringsOutput}`)
+    // })
+
+    const broadCastServ = new BroadcastService();
+    const listenOne = new Listener(broadCastServ, EventKeys.ALL, "first");
+    const listenTwo = new Listener(broadCastServ, EventKeys.SINGLE, "second");
+
+    broadCastServ.broadcast(EventKeys.ALL, "All event broadcast");
+    broadCastServ.broadcast(EventKeys.SINGLE, "single event broadcast");
+    broadCastServ.broadcast(EventKeys.ALL, "another ALL event broadcast");
+
+
   }
 
   
 
-  getProductName(id: number): Observable<IProductDescription> {
-    return of(
-      {
-        id: id,
-        name: `Product_${id}`,
-        description: `Description_${id}`
-      }
-    )
-  }
+  // getProductName(id: number): Observable<IProductDescription> {
+  //   return of(
+  //     {
+  //       id: id,
+  //       name: `Product_${id}`,
+  //       description: `Description_${id}`
+  //     }
+  //   )
+  // }
 
 }
