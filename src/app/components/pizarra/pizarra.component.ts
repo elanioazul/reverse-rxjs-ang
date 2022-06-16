@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, of, from, pipe, interval} from 'rxjs';
-import {catchError, map, take, mergeMap, delay} from 'rxjs/operators';
+import {catchError, map, take, mergeMap, concatMap, delay} from 'rxjs/operators';
 import { IValue, INestedObj } from 'src/app/interfaces/varias.interfaces';
 import { IProductId, IProductDescription } from 'src/app/interfaces/catalogue.interface';
 @Component({
@@ -126,7 +126,7 @@ export class PizarraComponent implements OnInit {
     // })
     
     const delayedEmit = this.emitThreeTwoOne.pipe(
-      mergeMap((value: number) => {
+      concatMap((value: number) => {
         console.log(
           `>> emit >>
           ${new Date().toLocaleTimeString()}
