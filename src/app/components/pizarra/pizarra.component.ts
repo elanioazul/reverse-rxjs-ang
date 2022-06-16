@@ -179,6 +179,9 @@ export class PizarraComponent implements OnInit {
     broadCastServ.broadcast(EventKeys.SINGLE, "single event broadcast");
     broadCastServ.broadcast(EventKeys.ALL, "another ALL event broadcast");
 
+    listenOne.unregister();
+    broadCastServ.broadcast(EventKeys.ALL, "final ALL event broadcast")
+
 
   }
 
