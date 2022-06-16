@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, of, from, pipe, interval} from 'rxjs';
-import {catchError, map, take, mergeMap, concatMap, delay} from 'rxjs/operators';
+import { Observable, of, from, pipe, interval, forkJoin} from 'rxjs';
+import {catchError, map, take, mergeMap, concatMap, delay, toArray} from 'rxjs/operators';
 import { IValue, INestedObj } from 'src/app/interfaces/varias.interfaces';
 import { IProductId, IProductDescription } from 'src/app/interfaces/catalogue.interface';
 @Component({
@@ -23,6 +23,7 @@ export class PizarraComponent implements OnInit {
     [{id: 1}, {id: 2}, {id: 3}]
   )
   public emitThreeTwoOne = of(3,2,1);
+  public onePerSec = interval(1000);
   constructor() { }
 
   ngOnInit(): void {
@@ -125,24 +126,46 @@ export class PizarraComponent implements OnInit {
     //     console.log(`product desc: ${value.description}`);
     // })
     
-    const delayedEmit = this.emitThreeTwoOne.pipe(
-      concatMap((value: number) => {
-        console.log(
-          `>> emit >>
-          ${new Date().toLocaleTimeString()}
-          value: ${value},
-          delaying: ${1000 * value} ms`
-        );
-        return of(value).pipe(delay(1000 * value));
-      })
-    )
+    // const delayedEmit = this.emitThreeTwoOne.pipe(
+    //   concatMap((value: number) => {
+    //     console.log(
+    //       `>> emit >>
+    //       ${new Date().toLocaleTimeString()}
+    //       value: ${value},
+    //       delaying: ${1000 * value} ms`
+    //     );
+    //     return of(value).pipe(delay(1000 * value));
+    //   })
+    // )
 
-    delayedEmit.subscribe((val: number) => {
-      console.log(
-        `<< recieved <<
-        ${new Date().toLocaleString()}
-        recieved value: ${val}`
-      )
+    // delayedEmit.subscribe((val: number) => {
+    //   console.log(
+    //     `<< recieved <<
+    //     ${new Date().toLocaleString()}
+    //     recieved value: ${val}`
+    //   )
+    // })
+    const threeNumbers: Observable<number[]> = this.onePerSec.pipe(
+      take(3),
+      map((val: number) => {
+        console.log(`>> this is threeNumbersPipe emmitting: ${val}`);
+        return val;
+      }),
+      toArray()
+    );
+
+    const twoStrings: Observable<string[]> = this.onePerSec.pipe(
+      take(2),
+      map((val: number) => {
+        console.log(`>> this is twoStringsPipe emmitting: value_${val}`);
+        return `value_${val}`;
+      }),
+      toArray()
+    );
+
+    forkJoin([threeNumbers, twoStrings]).subscribe((val: any) => {
+      console.log(`<<threeNumbers returned : ${val[0]}`);
+      console.log(`<<threeNumbers returned : ${val[1]}`)
     })
   }
 
