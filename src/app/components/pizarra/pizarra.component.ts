@@ -163,9 +163,9 @@ export class PizarraComponent implements OnInit {
       toArray()
     );
 
-    forkJoin([threeNumbers, twoStrings]).subscribe((val: any) => {
-      console.log(`<<threeNumbers returned : ${val[0]}`);
-      console.log(`<<threeNumbers returned : ${val[1]}`)
+    forkJoin([threeNumbers, twoStrings]).subscribe(([threeNumbersOutput, twoStringsOutput]) => {
+      console.log(`<<threeNumbersOutput returned : ${threeNumbersOutput}`);
+      console.log(`<<twoStringsOutput returned : ${twoStringsOutput}`)
     })
   }
 
